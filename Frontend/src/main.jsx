@@ -31,7 +31,6 @@ const router = createBrowserRouter([
                 </AuthLayout>
             ),
         },
-        },
         {
             path: "/about",
             element: (
