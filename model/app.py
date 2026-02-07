@@ -7,14 +7,21 @@ from PIL import Image
 
 MODEL_ID = "dima806/deepfake_vs_real_image_detection"
 
-processor = AutoImageProcessor.from_pretrained(MODEL_ID)
-model = AutoModelForImageClassification.from_pretrained(MODEL_ID)
-model.eval()
+model = None
+processor = None
+
+def load_model():
+    global model, processor
+    if model is None:
+        processor = AutoImageProcessor.from_pretrained(MODEL_ID)
+        model = AutoModelForImageClassification.from_pretrained(MODEL_ID)
+        model.eval()
 
 
 app = FastAPI(title="Deepfake image detection API")
 
-@torch.no_grad()
+@torch.inference_mode()
+
 def detect_deepfake_pil(image: Image.Image):
     inputs = processor(images=image, return_tensors="pt")
     outputs = model(**inputs)
@@ -28,6 +35,7 @@ def detect_deepfake_pil(image: Image.Image):
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    load_model()
     if file.content_type not in ["image/jpeg", "image/png", "image/jpg"]:
         raise HTTPException(status_code=400, detail="Invalid image format")
 
