@@ -1,7 +1,7 @@
 import React from 'react'
-import GithubImage from './assets/Github.png'
-import LinkedinImage from './assets/Linkedin.png'
-import LeetcodeImage from './assets/Leetcode.png'
+import GithubImage from '../../assets/Github.png'
+import LinkedinImage from '../../assets/Linkedin.png'
+import LeetcodeImage from '../../assets/Leetcode.png'
 import './ProfileCard.css'
 
 function ProfileCard({name, image, description, Linkedin, Github, Leetcode}) {
