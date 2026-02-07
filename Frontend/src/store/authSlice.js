@@ -20,7 +20,7 @@ const authSlice = createSlice({
         loadImage: (state, action) => {
             state.unsignedImage = action.payload
         },
-        unloadImage: (state, action) => {
+        unloadImage: (state) => {
             state.unsignedImage = null
         }
     }
