@@ -7,6 +7,7 @@ import store from './store/store.js'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import { AuthLayout, History, Unsigned } from './components/index.js'
+import Profiles from './About/Profile.jsx'
 
 
 import Signup from './pages/Signup';
@@ -28,6 +29,13 @@ const router = createBrowserRouter([
                 <AuthLayout authentication={false}>
                     <Login />
                 </AuthLayout>
+            ),
+        },
+        },
+        {
+            path: "/about",
+            element: (
+                    <Profiles />
             ),
         },
         {

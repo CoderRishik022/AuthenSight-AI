@@ -1,0 +1,23 @@
+.profilesContainer {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+
+  /* dark purple gradient */
+  background: radial-gradient(
+    circle at top,
+    #1e1b4b,
+    #020617 70%
+  );
+}
+
+.profileSection {
+  height: 100vh;
+  scroll-snap-align: start;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: 1px solid rgba(139, 92, 246, 0.18);
+}
