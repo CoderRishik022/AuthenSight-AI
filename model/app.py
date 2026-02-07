@@ -6,6 +6,7 @@ import io
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 from PIL import Image
+from fastapi.middleware.cors import CORSMiddleware
 
 MODEL_ID = "dima806/deepfake_vs_real_image_detection"
 
@@ -21,6 +22,13 @@ def load_model():
 
 
 app = FastAPI(title="Deepfake image detection API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # or ["*"] for dev
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @torch.inference_mode()
 
