@@ -13,11 +13,8 @@ MODEL_ID = "dima806/deepfake_vs_real_image_detection"
 model = None
 processor = None
 
-<<<<<<< HEAD
-=======
 #loading model
-#is this working
->>>>>>> 7699c82 (git issues fixing)
+
 def load_model():
     global model, processor
     if model is None:
@@ -49,13 +46,13 @@ def detect_deepfake_pil(image: Image.Image):
     return { "label":label, "confidence":round(confidence*100, 2)}
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(queryObject: UploadFile = File(...)):
     load_model()
-    if file.content_type not in ["image/jpeg", "image/png", "image/jpg"]:
+    if queryObject.content_type not in ["image/jpeg", "image/png", "image/jpg"]:
         raise HTTPException(status_code=400, detail="Invalid image format")
 
     try:
-        image_bytes = await file.read()
+        image_bytes = await queryObject.read()
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
     except Exception:
@@ -109,15 +106,15 @@ def predict_video(frames):
     }
 
 @app.post("/predict-video")
-async def predict_video_api(file: UploadFile=File(...)):
+async def predict_video_api(queryObject: UploadFile=File(...)):
     load_model()
-    filename = file.filename.lower()
+    filename = queryObject.filename.lower()
     if not filename.endswith((".mp4", ".mov", ".avi", ".mkv")):
         raise HTTPException(status_code=400, detail="Invalid video format")
 
 
-    video_bytes = await file.read()
-    video_path = f"/tmp/{file.filename}"
+    video_bytes = await queryObject.read()
+    video_path = f"/tmp/{queryObject.filename}"
 
     with open(video_path, "wb") as f:
         f.write(video_bytes)
