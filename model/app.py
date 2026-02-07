@@ -73,19 +73,25 @@ def extract_frames(video_path, every_n_frames=10):
     return frames
 
 def predict_video(frames):
+    labels = []
     fake_scores = []
 
     for frame in frames:
         result = detect_deepfake_pil(frame)
-        fake_scores.append(result["confidence"])
+        labels.append(result["label"])
+        if result["label"] == "FAKE":
+            fake_scores.append(result["confidence"])
+        else:
+            fake_scores.append(100 - result["confidence"])
 
     if not fake_scores:
         raise HTTPException(status_code=400, detail="No frames analyzed")
-    avg_confidence = sum(fake_scores)/len(fake_scores)
-
+    avg_fake_confidence = sum(fake_scores)/len(fake_scores)
+    avg_real_confidence = 100 - sum(fake_scores)/len(fake_scores)
+    ans = "FAKE" if avg_fake_confidence>50 else "REAL"
     return{
-        "label": "FAKE" if avg_confidence>50 else "REAL",
-        "confidence": round(avg_confidence, 2),
+        "label": ans,
+        "confidence": round(avg_fake_confidence, 2) if ans == "Fake" else round(avg_real_confidence, 2),
         "frames_analyzed": len(frames)
     }
 
