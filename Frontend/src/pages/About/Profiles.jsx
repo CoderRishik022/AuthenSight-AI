@@ -1,5 +1,5 @@
 import ProfileCard from './ProfileCard.jsx'
-import IMG from './assets/download.jpg'
+import IMG from '../../assets/download.jpg'
 import './Profile.css'
 import CursorGlow from './CursorGlow.jsx'
 
