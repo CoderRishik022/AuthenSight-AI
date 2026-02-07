@@ -13,6 +13,11 @@ MODEL_ID = "dima806/deepfake_vs_real_image_detection"
 model = None
 processor = None
 
+<<<<<<< HEAD
+=======
+#loading model
+#is this working
+>>>>>>> 7699c82 (git issues fixing)
 def load_model():
     global model, processor
     if model is None:
