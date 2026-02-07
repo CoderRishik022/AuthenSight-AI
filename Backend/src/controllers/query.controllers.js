@@ -1,5 +1,5 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
-import { Query } from "../model/query.model.js";
+import { Query } from "../models/query.models.js";
 import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinary.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -11,11 +11,13 @@ const options = {
 
 const uploadQueryInfo = asyncHandler(async(req, res) => {
     const localPath = req.file.path
+    console.log(localPath)
     const queryObject = await uploadToCloudinary(localPath)
     if(!queryObject.url) throw new ApiError(500, "Failed to upload");
     const {ansClaim, ansPerc, user} = req.body
+    console.log(req.user)
     const query = await Query.create({
-        owner: user._id,
+        owner: req.user._id,
         queryObject: queryObject.url,
         ansClaim,
         ansPerc

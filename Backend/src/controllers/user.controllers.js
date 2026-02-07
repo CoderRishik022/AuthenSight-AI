@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import {User} from "../model/user.model.js"
+import {User} from "../models/user.models.js"
 
 const options = {
     httpOnly: true,
@@ -46,8 +46,11 @@ const registerUser = asyncHandler(async(req, res) => {
 
     if(!createdUser) throw new ApiError(500, "Unable to create user");
     console.log(createdUser)
+    const {accessToken, refreshToken} = getAccessRefreshToken(user._id)
     return res
     .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(new ApiResponse(200, createdUser, "User registered successfully"))
 })
 

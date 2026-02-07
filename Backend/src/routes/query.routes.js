@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js";
-import { uploadQueryInfo, getQuery, deleteQuery } from "../controllers/query.controllers";
+import { uploadQueryInfo, getQuery, deleteQuery } from "../controllers/query.controllers.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
 router.route("/queryInfo").post(
-    verifyJwt,
     upload.single("queryObject"),
+    verifyJwt,
     uploadQueryInfo
 )
 
