@@ -1,19 +1,24 @@
-import {Routes, Route} from 'react-router-dom'
-import Home from './pages/Home.js'
-import Profiles from './pages/Profiles.js'
-import Reports from './pages/Reports.js'
-
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import './App.css'
+import {login, logout} from "./store/authSlice"
+import { Header } from './components'
+import { Outlet } from 'react-router-dom'
 
 function App() {
+  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
   
-  return (
-    <Routes>
-      <Route path="/" element={<Home/>} />
-      <Route path="/profiles" element={<Profiles/>} />
-      <Route path="/reports" element={<Reports/>} />
-    </Routes>
-  )
+  return !loading ? (
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+      <div className='w-full block'>
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  ) : null
 }
 
 export default App
