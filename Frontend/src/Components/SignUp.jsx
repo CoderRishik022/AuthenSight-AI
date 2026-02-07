@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { login } from '../store/authSlice'
 import { api } from './Axios/axios'
 
-function Signup() {
+function SignUp() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [error,SetError] = useState("")
@@ -96,4 +96,4 @@ function Signup() {
 
 }
 
-export default Signup
+export default SignUp
