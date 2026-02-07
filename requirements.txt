@@ -5,3 +5,4 @@ uvicorn
 transformers
 pillow
 python-multipart
+opencv-python
