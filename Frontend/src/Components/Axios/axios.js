@@ -5,4 +5,9 @@ const api = axios.create({
     withCredentials: true
   })
 
-export {api}
+const apiAi = axios.create({
+    baseURL: "http://localhost:8000",
+    withCredentials: true
+  })
+
+export {api, apiAi}
