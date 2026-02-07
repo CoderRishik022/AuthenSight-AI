@@ -89,8 +89,9 @@ def predict_video(frames):
 
 @app.post("/predict-video")
 async def predict_video_api(file: UploadFile=File(...)):
-    if file.content_type not in ["video/mp4", "video/avi", "video/mov", "video/mkv"]:
+    if file.content_type not in ["video/mp4", "video/quicktime", "video/x-msvideo", "video/x-matroska"]:
         raise HTTPException(status_code=400, detail="Invalid video format")
+
     video_bytes = await file.read()
     video_path = "/tmp/input.mp4"
 
