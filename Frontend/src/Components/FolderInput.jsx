@@ -61,34 +61,43 @@ const FolderInput = () => {
     fileInputRef.current.click();
   };
 
-  const ask = async() => {
-    const fileType = file.type.startsWith("video/") ? "video" : "image"
-    let response;
-    if(fileType === "image") response = await apiAi.post("/predict", queryObject)
-    else response = await apiAi.post("/predict-video", queryObject)
-    let { label, confidence } = response.data
+const ask = async () => {
+  const fileType = file.type.startsWith("video/") ? "video" : "image"
 
-    let ansClaim = null
-    label = label.toLowerCase()
-    console.log(label)
-    if(label == "real") ansClaim = true
-    else ansClaim = false
+  // 🔹 FormData ONLY for AI
+  const aiFormData = new FormData()
+  aiFormData.append("queryObject", file)
 
-    let ansPerc = null
-    ansPerc = String(confidence)
-    queryObject.append("type", fileType)
-    queryObject.append("ansClaim", ansClaim)
-    queryObject.append("ansPerc", ansPerc)
-
-    if(authStatus) {
-      const res = await api.post("/query/queryInfo", queryObject)
-      if(res) navigate(`/query/${res.data.data._id}`);
-    } else {
-      const previewUrl = URL.createObjectURL(file);
-      dispatch(loadImage({ previewUrl, ansClaim, ansPerc }))
-      if(previewUrl) navigate("/unsignedQuery")
-    }
+  let response
+  if (fileType === "image") {
+    response = await apiAi.post("/predict", aiFormData)
+  } else {
+    response = await apiAi.post("/predict-video", aiFormData)
   }
+
+  let { label, confidence } = response.data
+  label = label.toLowerCase()
+
+  const ansClaim = label === "real"
+  const ansPerc = String(confidence)
+
+  // 🔹 FormData ONLY for Node backend
+  const queryFormData = new FormData()
+  queryFormData.append("queryObject", file)
+  queryFormData.append("type", fileType)
+  queryFormData.append("ansClaim", ansClaim)
+  queryFormData.append("ansPerc", ansPerc)
+
+  if (authStatus) {
+    const res = await api.post("/query/queryInfo", queryFormData)
+    if (res) navigate(`/query/${res.data.data._id}`)
+  } else {
+    const previewUrl = URL.createObjectURL(file)
+    dispatch(loadImage({ previewUrl, ansClaim, ansPerc }))
+    navigate("/unsignedQuery")
+  }
+}
+
 
 return (
   <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-6 w-screen">

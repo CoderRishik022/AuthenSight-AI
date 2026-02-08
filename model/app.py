@@ -25,7 +25,7 @@ def load_model():
 app = FastAPI(title="Deepfake image detection API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["*"] for dev
+    allow_origins=["http://localhost:5173"],  # ✅ NOT "*"
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

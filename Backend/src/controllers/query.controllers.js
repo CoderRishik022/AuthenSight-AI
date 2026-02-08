@@ -51,11 +51,44 @@ const getQuery = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, query, "Query fetched successfully"))
 })
 
+// import { Query } from "../models/query.model.js"
+// import { deleteFromCloudinary } from "../utils/cloudinary.js"
+// import { ApiError } from "../utils/ApiError.js"
+// import { ApiResponse } from "../utils/ApiResponse.js"
+// import asyncHandler from "../utils/asyncHandler.js"
+
 const deleteQuery = asyncHandler(async (req, res) => {
-    const image = req.filePath
-    const deleted = await deleteFromCloudinary(image)
-    return res.status(200)
-    .json(200, deleted, "File deleted successfully")
+  const { _id } = req.body
+
+  if (!_id) {
+    throw new ApiError(400, "Query ID is required")
+  }
+
+  // 🔹 Find query
+  const query = await Query.findById(_id)
+  if (!query) {
+    throw new ApiError(404, "Query not found")
+  }
+
+  // 🔹 Ownership check
+  if (query.owner.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, "You are not allowed to delete this query")
+  }
+
+  // 🔹 Delete from Cloudinary
+  try {
+    await deleteFromCloudinary(query.queryObject, query.type)
+  } catch (err) {
+    console.error("Cloudinary delete failed:", err)
+    // We don't block deletion if Cloudinary fails
+  }
+
+  // 🔹 Delete from DB
+  await Query.findByIdAndDelete(_id)
+
+  return res.status(200).json(
+    new ApiResponse(200, null, "Query deleted successfully")
+  )
 })
 
 export {
