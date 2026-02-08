@@ -9,6 +9,7 @@ function Unsigned() {
     const image = useSelector(state => state.auth.unsignedImage)
     const ansClaim = useSelector(state => state.auth.unsignedClaim)
     const ansPerc = useSelector(state => state.auth.unsignedPerc)
+    const type = useSelector(state => state.auth.type)
     const navigateToHome = () => {
 
         navigate("/")
@@ -46,11 +47,21 @@ function Unsigned() {
             {/* Right: Image */}
             <div className="flex-1 flex items-center justify-center">
                 <div className="relative rounded-xl overflow-hidden border border-gray-700 shadow-lg">
-                <img
-                    src={image}
-                    alt="Analyzed content"
-                    className="max-h-[360px] object-contain bg-black"
-                />
+                {type === "image" ?
+            <img
+              src={image}
+              alt="Analyzed content"
+              className="w-full max-h-[260px] md:max-h-[360px] object-contain"
+            />
+            : 
+            <video
+              src={image}
+              className="object-contain h-full"
+              controls
+              playsInline
+            />
+
+            }
                 </div>
             </div>
             </div>

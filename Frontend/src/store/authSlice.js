@@ -5,7 +5,8 @@ const initialState = {
     userData: null,
     unsignedImage: null,
     unsignedClaim: null,
-    unsignedPerc: null
+    unsignedPerc: null,
+    type: null
 }
 
 const authSlice = createSlice({
@@ -23,6 +24,7 @@ const authSlice = createSlice({
             state.unsignedImage = action.payload.previewUrl
             state.unsignedClaim = action.payload.ansClaim
             state.unsignedPerc = action.payload.ansPerc
+            state.type = action.payload.fileType
         },
         unloadImage: (state) => {
             state.unsignedImage = null

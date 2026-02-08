@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { api, apiAi } from './Axios/axios';
+import { api, apiAi } from './Axios/axios.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadImage } from '../store/authSlice';
@@ -93,7 +93,7 @@ const ask = async () => {
     if (res) navigate(`/query/${res.data.data._id}`)
   } else {
     const previewUrl = URL.createObjectURL(file)
-    dispatch(loadImage({ previewUrl, ansClaim, ansPerc }))
+    dispatch(loadImage({ previewUrl, ansClaim, ansPerc, fileType }))
     navigate("/unsignedQuery")
   }
 }
