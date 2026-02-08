@@ -14,7 +14,10 @@ model = None
 processor = None
 
 #loading model
+<<<<<<< HEAD
 #is this working
+=======
+>>>>>>> 76c52c10c787470a0385a6b3f54a4e55ed293232
 
 def load_model():
     global model, processor
