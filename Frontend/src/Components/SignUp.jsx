@@ -1,6 +1,5 @@
 import React,{useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-// import {Button, Logo, Input} from "./index"
 import { useDispatch } from 'react-redux'
 import { login } from '../store/authSlice'
 import { api } from './Axios/axios'
@@ -8,7 +7,7 @@ import { api } from './Axios/axios'
 function SignUp() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [error,SetError] = useState("")
+    const [error,SetError] = useState(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
@@ -25,7 +24,7 @@ function SignUp() {
                     console.log(userdata)
                     navigate("/")
         } catch (error) {
-            SetError(error)
+            SetError(error.message)
         }
     }
   return (
