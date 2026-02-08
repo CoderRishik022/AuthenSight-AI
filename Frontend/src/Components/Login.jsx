@@ -4,98 +4,49 @@ import { Link, useNavigate } from 'react-router-dom'
 import { login as authLogin } from '../store/authSlice'
 import { api } from './Axios/axios'
 
-
 function Login() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [error,setError] = useState('');
+
     const login = async(e) => {
       e.preventDefault()
-        try {
-          const { data } = await api.post("/user/login", {
-              email,
-              password
-          })
-          const userdata = data?.data
-          if(userdata) dispatch(authLogin(userdata));
+      try {
+          const { data } = await api.post("/user/login", { email, password })
+          if(data?.data) dispatch(authLogin(data.data));
           navigate("/")
-        } catch (err) {
-          setError(err)
-          console.log(error)
-        }
+      } catch (err) { setError("INVALID_CREDENTIALS"); }
     }
-  return (
-  <div className="min-h-screen flex items-center justify-center bg-[#0a0c10] px-4">
-  {/* Subtle Background Glow to match Hero */}
-  <div className="fixed inset-0 overflow-hidden pointer-events-none">
-    <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-emerald-600/5 blur-[120px]" />
-  </div>
 
-  <div className="w-full max-w-lg bg-[#0d1117]/80 backdrop-blur-2xl rounded-[2.5rem] p-10 border border-slate-800 shadow-2xl relative z-10">
-    
-    <div className="mb-8 flex flex-col items-center">
-      <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20">
-        <span className="text-black font-black text-xl">AS</span>
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#02040a] px-4 py-32">
+          <div className="w-full max-w-lg bg-[#0d1117]/40 backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5 shadow-2xl space-y-10">
+              <div className="flex flex-col items-center gap-6">
+                  <div className="w-16 h-16 bg-emerald-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-emerald-500/20">
+                      <span className="text-black font-black text-2xl">AS</span>
+                  </div>
+                  <div className="text-center space-y-2">
+                    <h2 className="text-3xl font-black text-white tracking-tight">SYSTEM ACCESS</h2>
+                    <p className="text-slate-500 font-mono text-xs tracking-widest uppercase">Initialize Authentication</p>
+                  </div>
+              </div>
+
+              <form onSubmit={login} className="space-y-6">
+                  <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Email Address</label>
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-6 py-5 rounded-[1.5rem] bg-black border border-white/5 text-white placeholder-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all font-mono" />
+                  </div>
+                  <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Password</label>
+                      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-6 py-5 rounded-[1.5rem] bg-black border border-white/5 text-white placeholder-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all font-mono" />
+                  </div>
+                  <button type="submit" className="w-full py-5 rounded-[1.5rem] bg-emerald-600 text-white font-black uppercase tracking-widest text-xs hover:bg-emerald-500 shadow-xl shadow-emerald-900/20 active:scale-95 transition-all">Sign In</button>
+              </form>
+              <p className="text-center text-slate-500 text-xs font-bold tracking-widest">NO ACCOUNT? <Link to="/signup" className="text-emerald-400 hover:underline">REGISTER SOURCE</Link></p>
+          </div>
       </div>
-      <h2 className="text-center text-3xl font-bold text-white tracking-tight">
-        Welcome Back
-      </h2>
-      <p className="mt-3 text-center text-sm text-slate-400">
-        Don&apos;t have an account?{" "}
-        <Link
-          to="/signup"
-          className="text-emerald-400 font-semibold hover:text-emerald-300 transition-colors"
-        >
-          Create one now
-        </Link>
-      </p>
-    </div>
-
-    {error && (
-      <div className="mb-6 flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-shake">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Invalid credentials. Please try again.
-      </div>
-    )}
-
-    <form onSubmit={login} className="space-y-4">
-      <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
-        <input
-          type="email"
-          placeholder="name@company.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-5 py-4 rounded-2xl bg-slate-900/50 text-white placeholder-slate-600 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Password</label>
-        <input
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-5 py-4 rounded-2xl bg-slate-900/50 text-white placeholder-slate-600 border border-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="w-full py-4 mt-4 rounded-2xl bg-emerald-600 text-white font-bold uppercase tracking-widest text-sm hover:bg-emerald-500 transition-all duration-300 shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
-      >
-        Sign In
-      </button>
-    </form>
-  </div>
-</div>
-);
-
+    )
 }
-
 export default Login
