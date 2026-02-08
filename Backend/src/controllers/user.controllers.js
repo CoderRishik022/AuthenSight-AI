@@ -27,6 +27,7 @@ const getAccessRefreshToken = async (userId) => {
 }
 
 const registerUser = asyncHandler(async(req, res) => {
+    console.log(req.body)
     const {username, email, password} = req.body
     if(
         [username, email, password].some((e) => e.trim === "")
@@ -46,7 +47,7 @@ const registerUser = asyncHandler(async(req, res) => {
 
     if(!createdUser) throw new ApiError(500, "Unable to create user");
     console.log(createdUser)
-    const {accessToken, refreshToken} = getAccessRefreshToken(user._id)
+    const {accessToken, refreshToken} = await getAccessRefreshToken(user._id)
     return res
     .status(200)
     .cookie("accessToken", accessToken, options)

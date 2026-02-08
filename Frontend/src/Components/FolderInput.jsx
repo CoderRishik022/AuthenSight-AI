@@ -1,5 +1,9 @@
 import React, { useState, useRef } from 'react';
+<<<<<<< HEAD
 import { api, apiAi } from './Axios/axios'; // Ensure this path matches your structure
+=======
+import { api, apiAi } from './Axios/axios.js';
+>>>>>>> 5e181e837b2cd02ccebcb185fdf0dcf1ac7e6ef4
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadImage } from '../store/authSlice';
@@ -129,6 +133,7 @@ const FolderInput = () => {
           <span className="font-bold text-slate-200 uppercase tracking-[0.2em] text-xs">Image Forensics</span>
         </div>
 
+<<<<<<< HEAD
         {/* VIDEO BOX */}
         <div 
           onClick={() => videoInputRef.current.click()}
@@ -153,6 +158,74 @@ const FolderInput = () => {
             </svg>
           </div>
           <span className="font-bold text-slate-200 uppercase tracking-[0.2em] text-xs">Video Forensics</span>
+=======
+  // 🔹 FormData ONLY for AI
+  const aiFormData = new FormData()
+  aiFormData.append("queryObject", file)
+
+  let response
+  if (fileType === "image") {
+    response = await apiAi.post("/predict", aiFormData)
+  } else {
+    response = await apiAi.post("/predict-video", aiFormData)
+  }
+
+  let { label, confidence } = response.data
+  label = label.toLowerCase()
+
+  const ansClaim = label === "real"
+  const ansPerc = String(confidence)
+
+  // 🔹 FormData ONLY for Node backend
+  const queryFormData = new FormData()
+  queryFormData.append("queryObject", file)
+  queryFormData.append("type", fileType)
+  queryFormData.append("ansClaim", ansClaim)
+  queryFormData.append("ansPerc", ansPerc)
+
+  if (authStatus) {
+    const res = await api.post("/query/queryInfo", queryFormData)
+    if (res) navigate(`/query/${res.data.data._id}`)
+  } else {
+    const previewUrl = URL.createObjectURL(file)
+    dispatch(loadImage({ previewUrl, ansClaim, ansPerc, fileType }))
+    navigate("/unsignedQuery")
+  }
+}
+
+
+return (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-6 w-screen">
+
+    <div className="flex gap-10">
+
+      {/* IMAGE BOX */}
+      <div
+        className={`relative w-72 h-52 cursor-pointer transition-all ${
+          file && file.type.startsWith("image/") ? "ring-2 ring-yellow-400" : ""
+        }`}
+        onClick={() => fileInputRef.current.click()}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault()
+          const f = e.dataTransfer.files[0]
+          if (f && f.type.startsWith("image/")) {
+            setFile(f)
+            if (videoInputRef.current) videoInputRef.current.value = null
+          }
+        }}
+      >
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        <div className="w-full h-full rounded-xl bg-gray-800 border-2 border-yellow-500 flex flex-col items-center justify-center">
+          <p className="text-yellow-400 font-semibold">Image</p>
+>>>>>>> 5e181e837b2cd02ccebcb185fdf0dcf1ac7e6ef4
         </div>
       </div>
 
