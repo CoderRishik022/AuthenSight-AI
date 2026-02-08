@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import './App.css'
-import {login, logout} from "./store/authSlice"
-import { Header } from './components'
-import { Outlet } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import './App.css';
+import { Header, Footer } from './Components'; // Import both from the index
+import { Outlet } from 'react-router-dom';
 
 function App() {
-  const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false);
   
   return !loading ? (
-    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
-      <div className='w-full block'>
-        <Header />
-        <main>
-          <Outlet />
-        </main>
-      </div>
+    <div className='min-h-screen flex flex-col bg-[#0a0c10] text-[#e2e8f0] font-sans'>
+      <Header />
+      <main className='flex-grow'>
+        <Outlet />
+      </main>
+      <Footer />
     </div>
-  ) : null
+  ) : (
+    <div className="h-screen w-screen flex items-center justify-center bg-[#0a0c10] text-emerald-500">
+       Loading System...
+    </div>
+  );
 }
 
-export default App
+export default App;
