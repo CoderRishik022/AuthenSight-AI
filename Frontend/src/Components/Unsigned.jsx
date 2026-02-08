@@ -7,6 +7,8 @@ function Unsigned() {
     const navigate = useNavigate()
 
     const image = useSelector(state => state.auth.unsignedImage)
+    const ansClaim = useSelector(state => state.auth.unsignedClaim)
+    const ansPerc = useSelector(state => state.auth.unsignedPerc)
     const navigateToHome = () => {
 
         navigate("/")
@@ -27,7 +29,7 @@ function Unsigned() {
                     Claim
                 </p>
                 <p className="text-lg font-semibold text-amber-300">
-                    {true ? "Real" : "Fake"}
+                    {ansClaim ? "Real" : "Fake"}
                 </p>
                 </div>
 
@@ -36,7 +38,7 @@ function Unsigned() {
                     Surety
                 </p>
                 <p className="text-4xl font-bold text-indigo-400">
-                    {93}%
+                    {ansPerc}%
                 </p>
                 </div>
             </div>

@@ -51,19 +51,27 @@ const FolderInput = () => {
   };
 
   const ask = async() => {
+    const response = await apiAi.post("/predict", queryObject)
+    const {label, confidence} = response.data
+    let ansClaim = null
+    if(label === "true") ansClaim = true
+    else ansClaim = false
+    let ansPerc = null
+    console.log(typeof(confidence))
+    console.log("confidence: ", confidence)
+    ansPerc = String(confidence)
+    queryObject.append("ansClaim", ansClaim)
+    queryObject.append("ansPerc", ansPerc)
     if(authStatus) {
-      const {label, confidence} = await apiAi.post("/predict", queryObject)
-      queryObject.append("ansClaim", label)
-      queryObject.append("ansPerc", confidence)
       const res = await api.post("/query/queryInfo", queryObject)
       if(res) navigate(`/query/${res.data.data._id}`);
-      console.log(file)
+      // console.log(file)
     }else {
       // const res = await api.post("/query/queryfile", queryObject)
       // console.log(res.data.data.url)
       // dispatch(loadImage(res.data.data.url))
       const previewUrl = URL.createObjectURL(file);
-      dispatch(loadImage(previewUrl))
+      dispatch(loadImage({previewUrl, ansClaim, ansPerc}))
      if(previewUrl) navigate("/unsignedQuery")
     }
   }

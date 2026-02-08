@@ -3,7 +3,9 @@ import {createSlice} from "@reduxjs/toolkit"
 const initialState = {
     status: false,
     userData: null,
-    unsignedImage: null
+    unsignedImage: null,
+    unsignedClaim: null,
+    unsignedPerc: null
 }
 
 const authSlice = createSlice({
@@ -18,10 +20,14 @@ const authSlice = createSlice({
             state.status = false
         },
         loadImage: (state, action) => {
-            state.unsignedImage = action.payload
+            state.unsignedImage = action.payload.previewUrl
+            state.unsignedClaim = action.payload.ansClaim
+            state.unsignedPerc = action.payload.ansPerc
         },
         unloadImage: (state) => {
             state.unsignedImage = null
+            state.unsignedClaim = null
+            state.unsignedPerc = null
         }
     }
 })
