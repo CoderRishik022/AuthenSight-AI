@@ -23,73 +23,112 @@ function Query() {
         navigate("/")
     }
   return (
-  <div className="min-h-screen w-screen bg-gradient-to-br from-black via-gray-900 to-black flex flex-col items-center px-4">
-    
-    <div className="flex items-center justify-center w-full py-6 md:py-12">
-      <div className="w-full max-w-5xl bg-gray-900/90 backdrop-blur-xl border border-gray-800 rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col md:flex-row gap-8">
-        
-        {/* Left: Analysis */}
-        <div className="flex-1 space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-white tracking-wide">
-            Analysis Result
-          </h2>
+  <div className="min-h-screen w-screen bg-[#02040a] flex flex-col items-center px-4 relative overflow-hidden">
+  
+  {/* Forensic Background Ambient Glows */}
+  <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/5 blur-[120px] pointer-events-none" />
+  <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-900/5 blur-[120px] pointer-events-none" />
 
-          <div className="bg-gray-800 rounded-xl p-4 md:p-5 border border-gray-700">
-            <p className="text-sm uppercase tracking-wider text-gray-400 mb-1">
-              Claim
-            </p>
-            <p className="text-lg md:text-xl font-semibold text-amber-300">
-              {query.ansClaim ? "Real" : "Fake"}
-            </p>
+  <div className="flex items-center justify-center w-full py-12 md:py-24 relative z-10">
+    <div className="w-full max-w-5xl bg-slate-900/40 backdrop-blur-3xl border border-white/5 rounded-[3rem] shadow-2xl p-8 md:p-12 flex flex-col md:flex-row gap-12 overflow-hidden">
+      
+      {/* Left: Forensic Metrics */}
+      <div className="flex-1 space-y-8">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-1 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
+              Forensic Report
+            </h2>
           </div>
-
-          <div className="bg-gray-800 rounded-xl p-4 md:p-5 border border-gray-700">
-            <p className="text-sm uppercase tracking-wider text-gray-400 mb-1">
-              Surety
-            </p>
-            <p className="text-3xl md:text-4xl font-bold text-indigo-400">
-              {query.ansPerc}%
-            </p>
-          </div>
+          <p className="text-slate-500 font-mono text-[10px] tracking-[0.3em] uppercase pl-4">
+            Analysis Reference: {query._id?.slice(-8).toUpperCase() || "INTERNAL_GEN"}
+          </p>
         </div>
 
-        {/* Right: Image */}
-        <div className="flex-1 flex items-center justify-center">
-          <div className="relative w-full max-w-sm md:max-w-md rounded-xl overflow-hidden border border-gray-700 shadow-lg bg-black">
-            {image ?
-            <img
-              src={query.queryObject}
-              alt="Analyzed content"
-              className="w-full max-h-[260px] md:max-h-[360px] object-contain"
-            />
-            : 
-            <video
-              src={query.queryObject}
-              className="object-contain h-full"
-              controls
-              playsInline
-            />
+        <div className="grid gap-6">
+          {/* Claim Metric */}
+          <div className="bg-black/40 rounded-2xl p-6 border border-white/5 group hover:border-emerald-500/30 transition-colors">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">
+              Detection Label
+            </p>
+            <div className="flex items-center gap-3">
+              <div className={`h-3 w-3 rounded-full animate-pulse ${query.ansClaim ? 'bg-emerald-500 shadow-[0_0_12px_#10b981]' : 'bg-red-500 shadow-[0_0_12px_#ef4444]'}`} />
+              <p className={`text-2xl font-black tracking-tight uppercase ${query.ansClaim ? "text-emerald-400" : "text-red-400"}`}>
+                {query.ansClaim ? "Verified Authentic" : "Synthetic Detect"}
+              </p>
+            </div>
+          </div>
 
-            }
-            
-            
+          {/* Surety Metric */}
+          <div className="bg-black/40 rounded-2xl p-6 border border-white/5 group hover:border-emerald-500/30 transition-colors">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+              Neural Confidence Score
+            </p>
+            <div className="flex items-baseline gap-1">
+              <p className="text-5xl md:text-6xl font-black font-mono text-white tracking-tighter italic">
+                {query.ansPerc}
+              </p>
+              <span className="text-xl font-black text-emerald-500">%</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    {/* CTA Button */}
-    <button
-      onClick={navigateToHome}
-      type="button"
-      className="w-full sm:w-auto px-10 py-3 mb-6 rounded-lg
-                 bg-indigo-600 text-white font-semibold
-                 hover:bg-indigo-500 transition duration-200
-                 shadow-lg shadow-indigo-600/30"
-    >
-      Authen-Sight Again
-    </button>
+      {/* Right: Forensic Media Viewer */}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="relative w-full max-w-sm md:max-w-md rounded-[2.5rem] overflow-hidden border-2 border-white/5 shadow-2xl bg-black aspect-square md:aspect-auto">
+          
+          {/* Scanline / HUD Overlay */}
+          <div className="absolute inset-0 z-10 pointer-events-none opacity-20 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
+          
+          {/* Horizontal Scanning Line */}
+          <div className="absolute inset-0 z-20 pointer-events-none">
+             <div className="w-full h-[2px] bg-emerald-500/50 shadow-[0_0_15px_#10b981] animate-[scanVertical_4s_linear_infinite]" 
+                  style={{ animationName: 'scanVertical' }} />
+             <style>{`
+                @keyframes scanVertical {
+                  0% { transform: translateY(-100%); }
+                  100% { transform: translateY(1000%); }
+                }
+             `}</style>
+          </div>
+
+          {image ? (
+            <img
+              src={query.queryObject}
+              alt="Analyzed content"
+              className="w-full max-h-[400px] object-contain relative z-0"
+            />
+          ) : (
+            <video
+              src={query.queryObject}
+              className="w-full h-full object-contain relative z-0"
+              controls
+              playsInline
+            />
+          )}
+
+          {/* Technical Corner Accents */}
+          <div className="absolute top-4 left-4 border-t-2 border-l-2 border-emerald-500/40 w-8 h-8 rounded-tl-xl z-20" />
+          <div className="absolute bottom-4 right-4 border-b-2 border-r-2 border-emerald-500/40 w-8 h-8 rounded-br-xl z-20" />
+        </div>
+      </div>
+    </div>
   </div>
+
+  {/* CTA Button */}
+  <button
+    onClick={navigateToHome}
+    type="button"
+    className="relative group px-12 py-4 mb-12 rounded-2xl bg-emerald-600 overflow-hidden shadow-xl shadow-emerald-900/20 active:scale-95 transition-all duration-300"
+  >
+    <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-[-20deg]" />
+    <span className="relative z-10 text-white font-black uppercase tracking-[0.2em] text-sm">
+      New Analysis Node
+    </span>
+  </button>
+</div>
 );
 
 
