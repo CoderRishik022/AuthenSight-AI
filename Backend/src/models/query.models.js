@@ -17,6 +17,11 @@ const querySchema = new Schema(
         ansClaim: {
             type: Boolean,
             required: true
+        },
+        type: {
+            type: String,
+            enum: ["image", "video"],
+            required: true
         }
     }
 ,{timestamps: true})

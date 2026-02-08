@@ -9,25 +9,38 @@ const options = {
     secure: true
     }
 
-const uploadQueryInfo = asyncHandler(async(req, res) => {
-    const localPath = req.file.path
-    console.log(localPath)
-    const queryObject = await uploadToCloudinary(localPath)
-    if(!queryObject.url) throw new ApiError(500, "Failed to upload");
-    const {ansClaim, ansPerc, user} = req.body
-    console.log(req.user)
-    const query = await Query.create({
-        owner: req.user._id,
-        queryObject: queryObject.url,
-        ansClaim,
-        ansPerc
-    })
-    if(!query) throw new ApiError(500, "Failed to save the query");
-    console.log(query)
-    return res
-    .status(200)
-    .json(new ApiResponse(200, query, "Query saved successfully"))
-})
+const uploadQueryInfo = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    throw new ApiError(400, "No file uploaded");
+  }
+
+  const localPath = req.file.path;
+  console.log(localPath);
+
+  const cloudinaryRes = await uploadToCloudinary(localPath);
+  if (!cloudinaryRes?.secure_url) {
+    throw new ApiError(500, "Failed to upload");
+  }
+
+  const { ansClaim, ansPerc } = req.body;
+
+  const query = await Query.create({
+    owner: req.user._id,
+    queryObject: cloudinaryRes.secure_url,
+    ansClaim,
+    ansPerc,
+    type: cloudinaryRes.resource_type // image | video (safe)
+  });
+
+  if (!query) {
+    throw new ApiError(500, "Failed to save the query");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, query, "Query saved successfully")
+  );
+});
+
 
 const getQuery = asyncHandler(async (req, res) => {
     console.log(req.body)

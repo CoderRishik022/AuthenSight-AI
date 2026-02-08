@@ -14,11 +14,6 @@ model = None
 processor = None
 
 #loading model
-<<<<<<< HEAD
-#is this working
-=======
->>>>>>> 76c52c10c787470a0385a6b3f54a4e55ed293232
-
 def load_model():
     global model, processor
     if model is None:
@@ -30,7 +25,7 @@ def load_model():
 app = FastAPI(title="Deepfake image detection API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # or ["*"] for dev
+    allow_origins=["*"],  # or ["*"] for dev
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -105,25 +100,31 @@ def predict_video(frames):
     ans = "FAKE" if avg_fake_confidence>50 else "REAL"
     return{
         "label": ans,
-        "confidence": round(avg_fake_confidence, 2) if ans == "Fake" else round(avg_real_confidence, 2),
+        "confidence": round(avg_fake_confidence, 2) if ans == "FAKE" else round(avg_real_confidence, 2),
         "frames_analyzed": len(frames)
     }
 
 @app.post("/predict-video")
-async def predict_video_api(queryObject: UploadFile=File(...)):
+async def predict_video_api(queryObject: UploadFile = File(...)):
     load_model()
+
     filename = queryObject.filename.lower()
     if not filename.endswith((".mp4", ".mov", ".avi", ".mkv")):
         raise HTTPException(status_code=400, detail="Invalid video format")
 
-
     video_bytes = await queryObject.read()
-    video_path = f"/tmp/{queryObject.filename}"
 
-    with open(video_path, "wb") as f:
-        f.write(video_bytes)
+    import tempfile, os
+
+    suffix = os.path.splitext(queryObject.filename)[1]
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_video:
+        temp_video.write(video_bytes)
+        video_path = temp_video.name
 
     frames = extract_frames(video_path)
+
+    os.remove(video_path)  # 🔥 cleanup
+
     if not frames:
         raise HTTPException(
             status_code=400,

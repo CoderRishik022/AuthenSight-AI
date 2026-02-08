@@ -120,7 +120,8 @@ const getUserHistory = asyncHandler(async(req,res) => {
                         $project: {
                             queryObject: 1,
                             ansPerc: 1,
-                            ansClaim: 1
+                            ansClaim: 1,
+                            type: 1
                         }
                     }
                 ]

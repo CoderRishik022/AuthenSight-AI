@@ -10,7 +10,7 @@ function History() {
         const getData = async () => {
             const data = await api.post("/user/history",)
             console.log(data.data.data)
-            setHistory(data.data.data)
+            setHistory((data.data.data).reverse())
         }
         getData()
     },[])
@@ -33,12 +33,22 @@ function History() {
               
               {/* Image */}
               <div className="h-48 bg-black flex items-center justify-center overflow-hidden">
-                <img
-                  src={e.queryObject}
-                  alt="Analyzed content"
-                  className="object-contain h-full group-hover:scale-105 transition-transform duration-300"
-                />
+                {e.type === "image" ? (
+                  <img
+                    src={e.queryObject}
+                    alt="Analyzed content"
+                    className="object-contain h-full group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <video
+                    src={e.queryObject}
+                    className="object-contain h-full"
+                    muted
+                    playsInline
+                  />
+                )}
               </div>
+
 
               {/* Content */}
               <div className="p-5 space-y-3">

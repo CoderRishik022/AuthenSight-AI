@@ -6,13 +6,16 @@ function Query() {
     const _id = useParams()
     const navigate = useNavigate()
     const [query, setQuery] = useState({})
+    let image = null
+    if(query.type === "image") image = true
+    else image = false
     useEffect(() => {
-        const getQuery = async () => {
-            const data = await api.post("/query/getquery", {
-                _id
-            })
-            setQuery(data.data.data)
-            console.log(data.data.data)
+      const getQuery = async () => {
+        const data = await api.post("/query/getquery", {
+          _id
+        })
+        setQuery(data.data.data)
+            // console.log(data.data.data)
         }
         getQuery()
     },[])
@@ -53,11 +56,23 @@ function Query() {
         {/* Right: Image */}
         <div className="flex-1 flex items-center justify-center">
           <div className="relative w-full max-w-sm md:max-w-md rounded-xl overflow-hidden border border-gray-700 shadow-lg bg-black">
+            {image ?
             <img
               src={query.queryObject}
               alt="Analyzed content"
               className="w-full max-h-[260px] md:max-h-[360px] object-contain"
             />
+            : 
+            <video
+              src={query.queryObject}
+              className="object-contain h-full"
+              controls
+              playsInline
+            />
+
+            }
+            
+            
           </div>
         </div>
       </div>
