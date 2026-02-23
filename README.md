@@ -48,53 +48,82 @@ PyTorch (ResNet Model)
 
 ---
 
-## ⚙️ Features
+# 📦 Installation
 
-- Image deepfake detection  
-- Video frame sampling & aggregation  
-- REST-based API endpoints  
-- Real-time inference  
-- Modular backend design  
-- Scalable architecture  
-
----
-
-## 📦 Installation
-
-### 1️⃣ Clone Repository
+## 1️⃣ Clone Repository
 ```bash
 git clone https://github.com/your-username/authensight-ai.git
 cd authensight-ai
 ```
 
-### 2️⃣ Create Virtual Environment
-```bash
-python -m venv venv
-source venv/bin/activate
-```
+---
 
-### 3️⃣ Install Dependencies
-```bash
-pip install -r requirements.txt
-```
+# ▶ Running the Full Project
+
+You need to run **three services**:
+
+- FastAPI (ML Server)
+- Express Backend
+- React Frontend
 
 ---
 
-## ▶ Running the FastAPI Server
+## 🔹 1. Run ML Server (FastAPI)
 
 ```bash
-uvicorn model.app:app --reload
+cd model
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --reload
+```
+
+Runs at:
+```
+http://127.0.0.1:8000
 ```
 
 Swagger Docs:
-
 ```
 http://127.0.0.1:8000/docs
 ```
 
 ---
 
-## 📡 API Endpoints
+## 🔹 2. Run Express Backend
+
+```bash
+cd Backend
+npm install
+npm start
+```
+
+Runs at:
+```
+http://localhost:5000
+```
+
+---
+
+## 🔹 3. Run React Frontend
+
+```bash
+cd Frontend
+npm install
+npm start
+```
+
+After starting, open your browser and visit:
+
+```
+http://localhost:3000
+```
+
+This is the main AuthenSight AI web interface.
+
+---
+
+# 📡 API Endpoints
 
 ### 🔹 Image Prediction
 
@@ -160,7 +189,6 @@ Built during a hackathon at IIIT Una.
 
 - **Rishik** — ML & FastAPI  
 - **Yash & Aman** — Frontend (React) & Backend (Express.js)  
-- **Yash & Aman** — Frontend (React) & Backend (Express.js)  
 
 ---
 
@@ -170,4 +198,4 @@ Built during a hackathon at IIIT Una.
 - RetinaFace integration  
 - GPU batching  
 - Confidence calibration  
-- Cloud deployment
+- Cloud deployment  
